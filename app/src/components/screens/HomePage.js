@@ -5,7 +5,11 @@ class HomePage extends Component {
   render() {
     return (
       <div style={{ display: "flex" }}>
-        <Map />
+        <Map
+          greenPoints={[
+            { coords: [-34.61921765948196, -58.44759256950819], id_point: "1" }
+          ]}
+        />
       </div>
     );
   }
