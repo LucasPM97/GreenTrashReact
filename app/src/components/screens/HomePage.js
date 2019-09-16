@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import Map from "../commons/Map";
+import Map from "../commons/SimpleMap";
 
 class HomePage extends Component {
+  state = {
+    pointList: []
+  };
   render() {
     return (
       <div style={{ display: "flex" }}>
-        <Map
-          greenPoints={[
-            { coords: [-34.61921765948196, -58.44759256950819], id_point: "1" }
-          ]}
-        />
+        <Map greenPoints={this.state.pointList} />
       </div>
     );
   }

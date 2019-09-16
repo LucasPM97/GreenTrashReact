@@ -1,4 +1,5 @@
 import React from "react";
+import { getBoundsOfDistance } from "geolib";
 import Map from "pigeon-maps";
 import Marker from "pigeon-marker";
 import { usePosition } from "../../api/usePosition";
@@ -11,7 +12,7 @@ function SimpleMap({ greenPoints }) {
     zoom: 12
   };
 
-  let userConfig = getPositionArray(latitude, longitude, error);
+  let userConfig = getUserPositionArray(latitude, longitude, error);
 
   return (
     <Map
@@ -20,6 +21,10 @@ function SimpleMap({ greenPoints }) {
       height={700}
     >
       {userConfig && <Marker anchor={userConfig.coords} payload={1} />}
+      {userConfig &&
+        userConfig.zoneCoords.map((x, index) => {
+          return <Marker key={"zone_" + index} anchor={x} payload={1} />;
+        })}
 
       {greenPoints.map(x => {
         return <Marker key={x.id_point} anchor={x.coords} payload={1} />;
@@ -28,11 +33,22 @@ function SimpleMap({ greenPoints }) {
   );
 }
 
-function getPositionArray(latitude, longitude, error) {
+function getUserPositionArray(latitude, longitude, error) {
   if (error || latitude == null || longitude == null) {
     return null;
   }
-  return { coords: [latitude, longitude], zoom: 17 };
+
+  const myLocationBounds = getBoundsOfDistance({ latitude, longitude }, 1000);
+
+  return {
+    coords: [latitude, longitude],
+    zoom: 17,
+    zoneCoords: [
+      ...myLocationBounds.map((x, index) => {
+        return [x.latitude, x.longitude];
+      })
+    ]
+  };
 }
 
 export default SimpleMap;
