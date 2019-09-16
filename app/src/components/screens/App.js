@@ -5,6 +5,7 @@ import ContactPage from "./ContactPage";
 import AboutPage from "./AboutPage";
 import Header from "../commons/Header";
 import firebaseConfig from "../../utils/config";
+import { Route } from "react-router-dom";
 
 class App extends Component {
   constructor(props) {
@@ -18,22 +19,11 @@ class App extends Component {
     return (
       <div className="container-fluid">
         <Header />
-        {this.getPath(route)}
+        <Route path="/" exact component={HomePage} />
+        <Route path="/contact" component={ContactPage} />
+        <Route path="/about" component={AboutPage} />
       </div>
     );
-  }
-
-  getPath(path) {
-    switch (path) {
-      case "/contact":
-        return <ContactPage />;
-
-      case "/about":
-        return <AboutPage />;
-
-      default:
-        return <HomePage />;
-    }
   }
 }
 

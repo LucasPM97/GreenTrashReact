@@ -1,10 +1,20 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 function Header() {
   return (
     <nav className="jumbotron">
-      <a href="/">Home</a> |<a href="/contact">Contact</a> |
-      <a href="/about">About</a>
+      <NavLink to={"/"} activeClassName="active">
+        Home
+      </NavLink>
+      |
+      <NavLink to={"/contact"} activeClassName="active">
+        Contact
+      </NavLink>
+      |
+      <NavLink to={"/about"} activeClassName="active">
+        About
+      </NavLink>
     </nav>
   );
 }
