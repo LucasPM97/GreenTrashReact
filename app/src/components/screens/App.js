@@ -14,8 +14,6 @@ class App extends Component {
   }
 
   render() {
-    const route = window.location.pathname;
-
     return (
       <div className="container-fluid">
         <Header />

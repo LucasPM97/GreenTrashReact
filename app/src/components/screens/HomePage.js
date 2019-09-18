@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Map from "../commons/SimpleMap";
+import SimpleMapContainer from "../commons/SimpleMapContainer";
 
 class HomePage extends Component {
   state = {
@@ -7,8 +7,9 @@ class HomePage extends Component {
   };
   render() {
     return (
-      <div style={{ display: "flex" }}>
-        <Map greenPoints={this.state.pointList} />
+        <div style={{ display: "flex" }}>
+          <SimpleMapContainer />
+        </div>
       </div>
     );
   }
