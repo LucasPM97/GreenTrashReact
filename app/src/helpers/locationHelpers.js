@@ -31,6 +31,15 @@ class LocationHelper {
       top: locationBoundTop
     };
   }
+
+  mapGeoPoint(points) {
+    return points.map((point, index) => {
+      return {
+        coords: [point.coordinates.latitude, point.coordinates.longitude],
+        id_point: index
+      };
+    });
+  }
 }
 
 export default new LocationHelper();

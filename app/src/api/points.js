@@ -12,15 +12,14 @@ class PointsApi {
       const geocollection = geofirestore.collection("basic_locations");
 
       // Create a GeoQuery based on a location
-      const query = geocollection.near({
-        center: new firebase.firestore.GeoPoint(latitude, longitude),
-        radius: 1000
-      });
+      const query = await geocollection
+        .near({
+          center: new firebase.firestore.GeoPoint(latitude, longitude),
+          radius: 2
+        })
+        .get();
 
-      // Get query (as Promise)
-      query.get().then(value => {
-        console.log(value.docs); // All docs returned by GeoQuery
-      });
+      return query.docs.map(x => x.data());
     } catch (error) {
       console.log(error);
     }
@@ -39,25 +38,25 @@ class PointsApi {
         .add({
           ...point
         })
-        .then(() => {
+        .then(document => {
           try {
             console.log(`Data Points ${index + 1} de ${pointList.length}`);
-          } catch (error) {
-            console.log(error);
-          }
-        });
-
-      collectionBasicPointsRef
-        .add({
-          coordinates: new firebase.firestore.GeoPoint(
-            point.latitude,
-            point.longitude
-          ),
-          type: "point"
-        })
-        .then(() => {
-          try {
-            console.log(`Geo Points ${index + 1} de ${pointList.length}`);
+            collectionBasicPointsRef
+              .add({
+                coordinates: new firebase.firestore.GeoPoint(
+                  point.latitude,
+                  point.longitude
+                ),
+                type: "point",
+                id: document.id
+              })
+              .then(() => {
+                try {
+                  console.log(`Geo Points ${index + 1} de ${pointList.length}`);
+                } catch (error) {
+                  console.log(error);
+                }
+              });
           } catch (error) {
             console.log(error);
           }
@@ -78,24 +77,25 @@ class PointsApi {
         .add({
           ...bell
         })
-        .then(() => {
+        .then(document => {
           try {
             console.log(`Data Bells ${index + 1} de ${bellList.length}`);
-          } catch (error) {
-            console.log(error);
-          }
-        });
-      collectionBasicPointsRef
-        .add({
-          coordinates: new firebase.firestore.GeoPoint(
-            bell.latitude,
-            bell.longitude
-          ),
-          type: "bell"
-        })
-        .then(() => {
-          try {
-            console.log(`Geo Bells ${index + 1} de ${bellList.length}`);
+            collectionBasicPointsRef
+              .add({
+                coordinates: new firebase.firestore.GeoPoint(
+                  bell.latitude,
+                  bell.longitude
+                ),
+                type: "bell",
+                id: document.id
+              })
+              .then(() => {
+                try {
+                  console.log(`Geo Bells ${index + 1} de ${bellList.length}`);
+                } catch (error) {
+                  console.log(error);
+                }
+              });
           } catch (error) {
             console.log(error);
           }

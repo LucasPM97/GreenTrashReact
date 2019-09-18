@@ -48,7 +48,7 @@ class SimpleMapContainer extends Component {
 
     this.setState({
       userConfig: {
-        coords: [-34.61921765948196, -58.44759256950819],
+        coords: [latitude, longitude],
         zoom: 17
         // zoneCoords: [
         //   [top.latitude, top.longitude],
@@ -61,7 +61,9 @@ class SimpleMapContainer extends Component {
 
     this.cleanLocationWatcher();
 
-    points.getNearLocations({ latitude, longitude }).then(this.updatePointList);
+    points
+      .getNearLocations({ latitude, longitude })
+      .then(this.updatePointList.bind(this));
   };
   onError = error => {
     console.log(error);
@@ -71,7 +73,16 @@ class SimpleMapContainer extends Component {
   }
 
   updatePointList(positions) {
-    console.log(positions);
+    try {
+      const mappedList = locationHelpers.mapGeoPoint(positions);
+
+      console.log(mappedList);
+      this.setState({
+        greenPoints: mappedList
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   cleanLocationWatcher() {
