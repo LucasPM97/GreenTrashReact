@@ -23,6 +23,11 @@ class SimpleMapContainer extends Component {
         greenPoints={this.state.greenPoints}
         defaultMapConfig={this.state.defaultMapConfig}
         userConfig={this.state.userConfig}
+        itemOnClick={itemCoords => {
+          this.setState({
+            userConfig: { ...this.state.userConfig, coords: itemCoords }
+          });
+        }}
       />
     );
   }
