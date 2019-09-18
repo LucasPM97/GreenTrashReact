@@ -7,11 +7,12 @@ import points from "../../api/points";
 class SimpleMapContainer extends Component {
   state = {
     defaultMapConfig: {
-      coords: [-34.61921765948196, -58.44759256950819],
+      mapCoords: [-34.61921765948196, -58.44759256950819],
       zoom: 12
     },
     userConfig: null,
-    greenPoints: []
+    greenPoints: [],
+    isLoading: true
   };
 
   watcher = null;
@@ -25,9 +26,10 @@ class SimpleMapContainer extends Component {
         userConfig={this.state.userConfig}
         itemOnClick={itemCoords => {
           this.setState({
-            userConfig: { ...this.state.userConfig, coords: itemCoords }
+            userConfig: { ...this.state.userConfig, mapCoords: itemCoords }
           });
         }}
+        isLoading={this.state.isLoading}
       />
     );
   }
@@ -45,22 +47,11 @@ class SimpleMapContainer extends Component {
   onChange = async ({ coords }) => {
     const { latitude, longitude } = coords;
 
-    // const { top, rigth, left, bottom } = locationHelpers.getZoneBoundsByCoords(
-    //   -34.61921765948196,
-    //   -58.44759256950819,
-    //   3000
-    // );
-
     this.setState({
       userConfig: {
-        coords: [latitude, longitude],
-        zoom: 17
-        // zoneCoords: [
-        //   [top.latitude, top.longitude],
-        //   [bottom.latitude, bottom.longitude],
-        //   [left.latitude, left.longitude],
-        //   [rigth.latitude, rigth.longitude]
-        // ]
+        actualCoords: [latitude, longitude],
+        zoom: 17,
+        mapCoords: [latitude, longitude]
       }
     });
 
@@ -83,7 +74,8 @@ class SimpleMapContainer extends Component {
 
       console.log(mappedList);
       this.setState({
-        greenPoints: mappedList
+        greenPoints: mappedList,
+        isLoading: false
       });
     } catch (error) {
       console.log(error);
