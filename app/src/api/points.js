@@ -1,34 +1,25 @@
 import firebase from "firebase";
-
+import { GeoFirestore } from "geofirestore";
 class PointsApi {
-  async getAllLocations() {
+  async getNearLocations({ latitude, longitude }) {
+    console.log({ latitude, longitude });
     try {
       const db = firebase.firestore();
 
-      const response = await db.collection("basic_locations").get();
+      const geofirestore = new GeoFirestore(db);
 
-      return response.docs.map(x => {
-        return { ...x.data(), id_point: x.id };
+      // Create a GeoCollection reference
+      const geocollection = geofirestore.collection("basic_locations");
+
+      // Create a GeoQuery based on a location
+      const query = geocollection.near({
+        center: new firebase.firestore.GeoPoint(latitude, longitude),
+        radius: 1000
       });
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
-  async getNearLocations(topCoords, leftCoords, bottomCoords, rightCoords) {
-    try {
-      const db = firebase.firestore();
-
-      const response = await db
-        .collection("basic_locations")
-        .where("", "<=", topCoords.latitude)
-        .where("", ">=", bottomCoords.latitude)
-        .where("", "<=", leftCoords.longitude)
-        .where("", "<=", rightCoords.longitude)
-        .get();
-
-      return response.docs.map(x => {
-        return { ...x.data(), id_point: x.id };
+      // Get query (as Promise)
+      query.get().then(value => {
+        console.log(value.docs); // All docs returned by GeoQuery
       });
     } catch (error) {
       console.log(error);
@@ -38,39 +29,78 @@ class PointsApi {
   async addPointLocations(pointList) {
     const db = firebase.firestore();
 
+    const geofirestore = new GeoFirestore(db);
+
     const collectionPointsRef = db.collection("green_points");
+    const collectionBasicPointsRef = geofirestore.collection("basic_locations");
 
-    var batch = db.batch();
+    pointList.forEach((point, index) => {
+      collectionPointsRef
+        .add({
+          ...point
+        })
+        .then(() => {
+          try {
+            console.log(`Data Points ${index + 1} de ${pointList.length}`);
+          } catch (error) {
+            console.log(error);
+          }
+        });
 
-    pointList.forEach(point => {
-      let newPointDocRef = collectionPointsRef.doc();
-
-      batch.set(newPointDocRef, {
-        ...point,
-        type: "greenPoint"
-      });
+      collectionBasicPointsRef
+        .add({
+          coordinates: new firebase.firestore.GeoPoint(
+            point.latitude,
+            point.longitude
+          ),
+          type: "point"
+        })
+        .then(() => {
+          try {
+            console.log(`Geo Points ${index + 1} de ${pointList.length}`);
+          } catch (error) {
+            console.log(error);
+          }
+        });
     });
-
-    await batch.commit();
   }
 
   async addBellLocations(bellList) {
     const db = firebase.firestore();
 
+    const geofirestore = new GeoFirestore(db);
+
     const collectionBellsRef = db.collection("green_bells");
+    const collectionBasicPointsRef = geofirestore.collection("basic_locations");
 
-    var batch = db.batch();
-
-    bellList.forEach(bell => {
-      let newBellDocRef = collectionBellsRef.doc();
-
-      batch.set(newBellDocRef, {
-        ...bell,
-        type: "bells"
-      });
+    bellList.forEach((bell, index) => {
+      collectionBellsRef
+        .add({
+          ...bell
+        })
+        .then(() => {
+          try {
+            console.log(`Data Bells ${index + 1} de ${bellList.length}`);
+          } catch (error) {
+            console.log(error);
+          }
+        });
+      collectionBasicPointsRef
+        .add({
+          coordinates: new firebase.firestore.GeoPoint(
+            bell.latitude,
+            bell.longitude
+          ),
+          type: "bell"
+        })
+        .then(() => {
+          try {
+            console.log(`Geo Bells ${index + 1} de ${bellList.length}`);
+          } catch (error) {
+            console.log(error);
+          }
+        });
     });
-
-    await batch.commit();
   }
 }
 

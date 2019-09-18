@@ -10,10 +10,10 @@ function SimpleMap({ greenPoints, defaultMapConfig, userConfig }) {
       height={700}
     >
       {userConfig && <Marker anchor={userConfig.coords} payload={1} />}
-      {userConfig &&
+      {/* {userConfig &&
         userConfig.zoneCoords.map((x, index) => {
           return <Marker key={"zone_" + index} anchor={x} payload={1} />;
-        })}
+        })} */}
 
       {greenPoints.map(x => {
         return <Marker key={x.id_point} anchor={x.coords} payload={1} />;
@@ -21,7 +21,5 @@ function SimpleMap({ greenPoints, defaultMapConfig, userConfig }) {
     </Map>
   );
 }
-
-
 
 export default SimpleMap;

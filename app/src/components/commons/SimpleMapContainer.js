@@ -40,37 +40,38 @@ class SimpleMapContainer extends Component {
   onChange = async ({ coords }) => {
     const { latitude, longitude } = coords;
 
-    const { top, rigth, left, bottom } = locationHelpers.getZoneBoundsByCoords(
-      latitude,
-      longitude
-    );
+    // const { top, rigth, left, bottom } = locationHelpers.getZoneBoundsByCoords(
+    //   -34.61921765948196,
+    //   -58.44759256950819,
+    //   3000
+    // );
 
     this.setState({
       userConfig: {
-        coords: [latitude, longitude],
-        zoom: 17,
-        zoneCoords: [
-          [top.latitude, top.longitude],
-          [bottom.latitude, bottom.longitude],
-          [left.latitude, left.longitude],
-          [rigth.latitude, rigth.longitude]
-        ]
+        coords: [-34.61921765948196, -58.44759256950819],
+        zoom: 17
+        // zoneCoords: [
+        //   [top.latitude, top.longitude],
+        //   [bottom.latitude, bottom.longitude],
+        //   [left.latitude, left.longitude],
+        //   [rigth.latitude, rigth.longitude]
+        // ]
       }
     });
 
     this.cleanLocationWatcher();
 
-    // points
-    //   .getNearLocations(top, left, bottom, rigth)
-    //   .then(positions => this.setState({
-
-    //   }));
+    points.getNearLocations({ latitude, longitude }).then(this.updatePointList);
   };
   onError = error => {
     console.log(error);
   };
   componentWillUnmount() {
     this.cleanLocationWatcher();
+  }
+
+  updatePointList(positions) {
+    console.log(positions);
   }
 
   cleanLocationWatcher() {

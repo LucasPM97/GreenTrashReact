@@ -1,26 +1,26 @@
 import { computeDestinationPoint } from "geolib";
 
 class LocationHelper {
-  getZoneBoundsByCoords(latitude, longitude) {
+  getZoneBoundsByCoords(latitude, longitude, distance) {
     const locationBoundTop = computeDestinationPoint(
       { latitude, longitude },
-      1000,
+      distance,
       0
     );
     const locationBoundBottom = computeDestinationPoint(
       { latitude, longitude },
-      1000,
+      distance,
       180
     );
 
     const locationBoundLeft = computeDestinationPoint(
       { latitude, longitude },
-      1000,
+      distance,
       90
     );
     const locationBoundRigth = computeDestinationPoint(
       { latitude, longitude },
-      1000,
+      distance,
       270
     );
 
