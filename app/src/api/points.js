@@ -15,7 +15,7 @@ class PointsApi {
       const query = await geocollection
         .near({
           center: new firebase.firestore.GeoPoint(latitude, longitude),
-          radius: 1.2
+          radius: 0.5
         })
         .get();
 

@@ -61,15 +61,15 @@ class SimpleMapContainer extends Component {
       .getNearLocations({ latitude, longitude })
       .then(this.updatePointList.bind(this));
   };
+
   onError = error => {
     console.log(error);
   };
-  componentWillUnmount() {
-    this.cleanLocationWatcher();
-  }
 
   updatePointList(positions) {
     try {
+      console.log(positions);
+
       const mappedList = locationHelpers.mapGeoPoint(positions);
 
       console.log(mappedList);
@@ -86,6 +86,10 @@ class SimpleMapContainer extends Component {
     this.geo.clearWatch(this.watcher);
     this.geo = null;
     this.watcher = null;
+  }
+
+  componentWillUnmount() {
+    this.cleanLocationWatcher();
   }
 }
 

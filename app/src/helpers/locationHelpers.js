@@ -36,7 +36,8 @@ class LocationHelper {
     return points.map((point, index) => {
       return {
         coords: [point.coordinates.latitude, point.coordinates.longitude],
-        id_point: index
+        id_point: point.id,
+        type: point.type
       };
     });
   }

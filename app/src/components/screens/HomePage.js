@@ -11,7 +11,7 @@ class HomePage extends Component {
   render() {
     return (
       <div>
-        <input
+        {/* <input
           value={"Upload Green Points"}
           type={"button"}
           onClick={this.uploadGreenPoints.bind(this)}
@@ -23,7 +23,7 @@ class HomePage extends Component {
         />
         <br />
         <br />
-        <br />
+        <br /> */}
         <div style={{ display: "flex" }}>
           <SimpleMapContainer />
         </div>
